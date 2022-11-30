@@ -32,8 +32,14 @@ function setCategory() {
           }
         }
         console.log(selectedCategory)
-        getProducts('https://api.escuelajs.co/api/v1/products' + '&categories='+encodeURI
-        (selectedCategory.join(',')));
+        async function getProducts() {
+          const response = await fetch(`https://api.escuelajs.co/api/v1/products${`?category=${selectedCategory.join(',')}` }`);
+          const data = await response.json();
+          return data;
+        }
+        //fetch data from get products
+        // getProducts('https://api.escuelajs.co/api/v1/products' + '&categories='+encodeURI
+        // (selectedCategory.join(',')));
     })
     navBottomEl.append(t);
   })

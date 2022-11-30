@@ -333,7 +333,12 @@ nav {
     color: #fff;
    
 }
-
+.sliderButton{
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    color: #fff;
+}
 /* .buyButton {
     position: absolute;
     top: 70%;
@@ -346,12 +351,10 @@ nav {
 } */
 
 .btn{
-    position: absolute;
-    align-items: center;
-    display: flex;
-    top: 70%;
+    background-color: white !important;
     outline: #fff;
-    font-size: 24px;
+    font-size: 24px !important;
+    width: 100%;
 }
 
 .products {
