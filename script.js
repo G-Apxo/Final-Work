@@ -6,47 +6,11 @@ const categories = [
   { "id": 5, "name": "Others", "image": "https://api.lorem.space/image?w=640&h=480&r=8949" }
 ]
 
-const navBottomEl = document.getElementById(`navBottom`);
-
-var selectedCategory = []
-setCategory();
-function setCategory() {
-  navBottomEl.innerHTML = ``;
-  categories.forEach(category => {
-    const t = document.createElement('div');
-    t.classList.add('menuItem');
-    t.id = category.id;
-    t.innerText = category.name;
-    t.addEventListener('click', () => {
-        if(selectedCategory.length ==0) {
-          selectedCategory.push(category.id);
-        } else {
-          if(selectedCategory.includes(category.id)){
-            selectedCategory.forEach((id, idx) => {
-              if(id == category.id){
-                selectedCategory.splice(idx, 1);
-              }
-            }) 
-          }else{
-            selectedCategory.push(category.id);
-          }
-        }
-        console.log(selectedCategory)
-        async function getProducts() {
-          const response = await fetch(`https://api.escuelajs.co/api/v1/products${`?category=${selectedCategory.join(',')}` }`);
-          const data = await response.json();
-          return data;
-        }
-        //fetch data from get products
-        // getProducts('https://api.escuelajs.co/api/v1/products' + '&categories='+encodeURI
-        // (selectedCategory.join(',')));
-    })
-    navBottomEl.append(t);
-  })
-}
+// const navBottomEl = document.getElementById(`navBottom`);
 
 document.addEventListener('DOMContentLoaded', function () {
   let products = document.querySelector(".products");
+  
     async function fetchProducts(url) {
     let data = await fetch(url);
     let response = await data.json();
@@ -71,7 +35,42 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
         `;
+  
+
     }
+
   }
-  fetchProducts('https://api.escuelajs.co/api/v1/products');
+  fetchProducts('https://api.escuelajs.co/api/v1/products?limit=20&offset=5');
 });
+
+// get data from https://api.escuelajs.co/api/v1/categories?limit=4
+// and render it in the navBottom element
+let navBottom = document.getElementById('navBottom');
+async function fetchProducts(url) {
+  let data = await fetch(url);
+  let response = await data.json();
+  for (let i = 0; i < response.length; i++) {
+    let name = response[i].name;
+    navBottom.innerHTML += `
+      <h3 class="menuItem">${name}</h3>
+    `;
+  }
+  // on navBottom click, filter products by category
+  navBottom.addEventListener('click', (e) => {
+    let products = document.querySelectorAll('.product');
+    let category = e.target.innerHTML;
+    products.forEach((product) => {
+      let productCategory = product.querySelector('.product-category').innerHTML;
+      if (productCategory !== category) {
+        product.style.display = 'none';
+      } else {
+        product.style.display = 'flex';
+      }
+    });
+  }
+  );
+}
+fetchProducts('https://api.escuelajs.co/api/v1/categories?limit=4');
+
+
+// get only categories from the API
